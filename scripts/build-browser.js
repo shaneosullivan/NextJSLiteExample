@@ -31,6 +31,17 @@ const pageCode = fs
     };
   });
 
+function ensureDir() {
+  try {
+    // First make sure that the directories we need exist
+    execSync(`mkdir -p ${rootDir}/tmp && mkdir -p ${rootDir}/public/js`);
+    return true;
+  } catch (err) {
+    console.error("Mkdir error", err.stdout.toString());
+    return false;
+  }
+}
+
 function build() {
   if (isRunning) {
     buildIsPending = true;
@@ -38,15 +49,6 @@ function build() {
   }
   console.log("Building....");
   isRunning = true;
-
-  try {
-    // First make sure that the directories we need exist
-    execSync(`mkdir -p ${rootDir}/tmp && mkdir -p ${rootDir}/public/js`);
-  } catch (err) {
-    console.error("Mkdir error", err.stdout.toString());
-    buildIsPending = isRunning = false;
-    return;
-  }
 
   try {
     // Convert the typescript to JS
@@ -90,13 +92,15 @@ function build() {
   }
 }
 
-build();
+if (ensureDir()) {
+  build();
 
-if (shouldWatch) {
-  watch(rootDir, { recursive: true }, function (evt, name) {
-    if (excludedDirs.some((dir) => name.indexOf(dir) === 0)) {
-      return;
-    }
-    build();
-  });
+  if (shouldWatch) {
+    watch(rootDir, { recursive: true }, function (evt, name) {
+      if (excludedDirs.some((dir) => name.indexOf(dir) === 0)) {
+        return;
+      }
+      build();
+    });
+  }
 }
