@@ -4,7 +4,7 @@ var watch = require("node-watch");
 
 var rootDir = __dirname.replace("/scripts", "");
 
-var excludedDirs = ["tmp", "public/js", "scripts"].map(
+var excludedDirs = ["tmp", "public", "scripts", "node_modules", "styles"].map(
   (dir) => rootDir + "/" + dir
 );
 
