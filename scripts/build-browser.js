@@ -1,4 +1,5 @@
 const { execSync } = require("child_process");
+const fs = require("fs");
 var watch = require("node-watch");
 
 var rootDir = __dirname.replace("/scripts", "");
@@ -13,11 +14,29 @@ var shouldMinify = process.argv.some((arg) => arg === "--minify");
 var isRunning = false;
 var buildIsPending = false;
 
+// List of the files to transpile per page. They're all in the /browser folder.
+const pageCode = fs
+  .readdirSync(`${rootDir}/browser`)
+  .filter((file) => {
+    return (
+      file.indexOf(".ts") === file.length - 3 ||
+      file.indexOf(".tsx") === file.length - 4
+    );
+  })
+  .map((fileName) => {
+    const idx = fileName.lastIndexOf(".");
+    return {
+      name: fileName.substring(0, idx),
+      ext: fileName.substring(idx + 1),
+    };
+  });
+
 function build() {
   if (isRunning) {
     buildIsPending = true;
     return false;
   }
+  console.log("Building....");
   isRunning = true;
 
   try {
@@ -25,24 +44,32 @@ function build() {
     execSync(`mkdir -p ${rootDir}/tmp && mkdir -p ${rootDir}/public/js`);
   } catch (err) {
     console.error("Mkdir error", err.stdout.toString());
+    buildIsPending = isRunning = false;
     return;
   }
 
   try {
     // Convert the typescript to JS
-    execSync(`npm run build-browser`);
+    pageCode.forEach((fileInfo) => {
+      execSync(
+        `tsc browser/${fileInfo.name}.${fileInfo.ext} --jsx react-jsx --outDir tmp`
+      );
+    });
   } catch (err) {
     console.error("Typescript error", err.stdout.toString());
+    buildIsPending = isRunning = false;
     return;
   }
 
   try {
-    // Put all the JS files into a single JS file
-    var cmd = `browserify ${rootDir}/tmp/browser.js`;
-    if (shouldMinify) {
-      cmd += `-p [ tinyify --no-flat ] `;
-    }
-    execSync(`${cmd} > ${rootDir}/public/js/browser.js`);
+    pageCode.forEach((fileInfo) => {
+      // Put all the JS files into a single JS file
+      var cmd = `browserify ${rootDir}/tmp/browser/${fileInfo.name}.js`;
+      if (shouldMinify) {
+        cmd += `-p [ tinyify --no-flat ] `;
+      }
+      execSync(`${cmd} > ${rootDir}/public/js/${fileInfo.name}.js`);
+    });
 
     console.log("Build complete");
 

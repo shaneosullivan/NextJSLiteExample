@@ -83,14 +83,21 @@ export default function HomePage(props: Props) {
           loaded on the page, but not executed on the server.
         </p>
 
+        <h2>Other examples</h2>
+        <ul>
+          <li>
+            <a href="/reactCode">Use React on the client side without NextJS</a>
+          </li>
+        </ul>
+
         <HelpDialog isShown={true} />
       </main>
-      <script src={"js/browser.js?" + props.cacheParam}></script>
+      <script src={"js/index.js?" + props.cacheParam}></script>
       <script
         type="text/javascript"
         dangerouslySetInnerHTML={{
           __html: `
-          startApp( 
+          startPage(
             ${JSON.stringify({
               here: "are",
               some: "example",

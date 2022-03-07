@@ -1,12 +1,13 @@
-import { makeDialog } from "./dialog";
-import { addListener, qId } from "./dom";
-import { formatNow } from "./format";
+import { makeDialog } from "../lib/dialog";
+import { addListener, qId } from "../lib/dom";
+import { formatNow } from "../lib/format";
+import initServiceWorker from "../lib/initServiceWorker";
 
 (function () {
   // This is the function that initialises the application. It is invoked by a
   // script tag that the server renders, and optionally passes through any
   // information it needs, such as user information, public keys etc.
-  function startApp(options) {
+  function startPage(options) {
     console.log(
       "This runs in the browser: Date is ",
       formatNow(),
@@ -43,19 +44,7 @@ import { formatNow } from "./format";
   // Optional, use a ServiceWorker.  See the code in
   // public/service_worker.js for what is executed. It's mostly from
   // https://developers.google.com/web/fundamentals/primers/service-workers
-  if ("serviceWorker" in navigator) {
-    addListener(window, "load", function () {
-      navigator.serviceWorker.register("/service_worker.js").then(
-        function (registration) {
-          // Registration was successful
-        },
-        function (err) {
-          // registration failed :(
-          console.log("ServiceWorker registration failed: ", err);
-        }
-      );
-    });
-  }
+  initServiceWorker();
 
-  window["startApp"] = startApp;
+  window["startPage"] = startPage;
 })();
