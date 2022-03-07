@@ -1,0 +1,42 @@
+{
+  "name": "nextjsliteexample",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "node scripts/build-browser.js --minify && next build",
+    "build-browser": "tsc lib/browser.ts --outDir tmp",
+    "watch": "node scripts/build-browser.js --watch",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "ts-jest",
+    "push": "npm run test && npm run build && git push origin main"
+  },
+  "dependencies": {
+    "@types/sharp": "^0.29.5",
+    "cookie": "^0.4.1",
+    "firebase": "^9.6.3",
+    "firebase-admin": "^10.0.2",
+    "next": "^12.1.0",
+    "node-watch": "^0.7.3",
+    "preact": "^10.6.5",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-page-visibility": "^6.4.0",
+    "request": "^2.88.2",
+    "sharp": "^0.30.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.7",
+    "@types/react": "^16.14.15",
+    "@types/uuid": "^8.3.4",
+    "browserify": "^17.0.0",
+    "eslint": "8.6.0",
+    "eslint-config-next": "12.0.8",
+    "esmify": "^2.1.1",
+    "tinyify": "^3.0.0",
+    "tsify": "^5.0.4",
+    "typescript": "^4.4.2",
+    "watchify": "^4.0.0"
+  }
+}

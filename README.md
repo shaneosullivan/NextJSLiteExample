@@ -1,2 +1,10 @@
-# NextJSLiteExample
-A simple example project that shows how to set up a NextJS project with server side rendering, and simple build tools for the minimal amount of client side Javascript
+== NextJS Lite Example ==
+
+This is a simple example project of one way to use NextJS with
+
+- Server side only rendering
+- No ReactJS or NextJS on the client's browser
+- A minimal amount of JavaScript on the client's browser
+- A simple build system that supports Typescript to create the client side only code
+
+It's certainly not production ready, but feel free to use it as the beginning of your project.
