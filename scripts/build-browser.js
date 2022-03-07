@@ -61,14 +61,17 @@ function build() {
     return;
   }
 
+  let currentCmd = null;
   try {
     pageCode.forEach((fileInfo) => {
       // Put all the JS files into a single JS file
-      var cmd = `browserify ${rootDir}/tmp/browser/${fileInfo.name}.js`;
+      var cmd = `browserify ${rootDir}/tmp/browser/${fileInfo.name}.js `;
       if (shouldMinify) {
         cmd += `-p [ tinyify --no-flat ] `;
       }
-      execSync(`${cmd} > ${rootDir}/public/js/${fileInfo.name}.js`);
+
+      currentCmd = `${cmd} > ${rootDir}/public/js/${fileInfo.name}.js`;
+      execSync(currentCmd);
     });
 
     console.log("Build complete");
@@ -79,7 +82,11 @@ function build() {
       build();
     }
   } catch (err) {
-    console.error("Browserify error", err.stdout.toString());
+    console.error(
+      "Browserify error running command",
+      currentCmd,
+      err.stdout.toString()
+    );
   }
 }
 
