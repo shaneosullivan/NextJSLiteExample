@@ -7,9 +7,7 @@
     "build-browser": "tsc lib/browser.ts --outDir tmp",
     "watch": "node scripts/build-browser.js --watch",
     "start": "next start",
-    "lint": "next lint",
-    "test": "ts-jest",
-    "push": "npm run test && npm run build && git push origin main"
+    "lint": "next lint"
   },
   "dependencies": {
     "@types/sharp": "^0.29.5",
