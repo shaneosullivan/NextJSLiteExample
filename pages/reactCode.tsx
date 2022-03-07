@@ -44,7 +44,7 @@ export default function ReactCodePage(props: Props) {
           Click <button data-id="genReactUI">This Button</button> to render some
           React here in the browser
         </p>
-        <p data-id="reactDestination"></p>
+        <div data-id="reactDestination"></div>
       </main>
       <script src={"js/reactCode.js?" + props.cacheParam}></script>
       <script
