@@ -7,7 +7,7 @@ This is a simple example project of one way to use NextJS with
 - A minimal amount of JavaScript on the client's browser
 - A simple build system that supports Typescript to create the client side only code
 
-Feel free to use it as the beginning of your project.
+Feel free to use it as the beginning of your project. See it running live at [https://next-js-lite-example.vercel.app/](https://next-js-lite-example.vercel.app/)
 
 ## Using it
 
@@ -38,6 +38,7 @@ This project has a few examples of simple things you can do without React or Nex
 - Sharing Typescript code between the client and the server, so code such as formatters can be written once and used in both environments.
 - Rendering, showing and hiding dialogs.
 - Dynamic rendering of complex UI on the server, and requested via `fetch()` on the client.
+- Pulling in a UI library for a single page if needed.
 
 Of course, you can use whatever you want in the browser, including Web Components, or even other
 client side libraries to render more complex UIs if you want to do so. It's the Open Web, go have fun, but in a highly performant way!
