@@ -32,6 +32,15 @@ export default function HomePage(props: Props) {
           side rendering with ReactJS, without needing to ship many hundreds of
           KB of JavaScript to the clients browser.
         </p>
+        <p>
+          The code for this project is open source and available{" "}
+          <a
+            href="https://github.com/shaneosullivan/NextJSLiteExample"
+            target="_blank"
+          >
+            on Github
+          </a>
+        </p>
 
         <h2>Server and client side rendering</h2>
         <p>
