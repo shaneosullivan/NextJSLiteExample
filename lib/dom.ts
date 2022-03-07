@@ -18,7 +18,7 @@ export function qsa(query, node?: Element): Array<Element> {
 }
 
 export function addListener(
-  node: Element | Window,
+  node: Element | Window | Document,
   evtName: string,
   fn: EventListenerOrEventListenerObject,
   capture?: boolean
