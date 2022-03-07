@@ -13,7 +13,7 @@ export function qId(nodeId: string, node?: Element) {
   return qs("[data-id=" + nodeId + "]", node);
 }
 
-export function qsa(query, node): Array<Element> {
+export function qsa(query, node?: Element): Array<Element> {
   return Array.from((node || doc).querySelectorAll(query));
 }
 
