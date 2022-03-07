@@ -37,6 +37,10 @@ export default function ReactCodePage(props: Props) {
           this is a feasible solution.
         </p>
         <p>
+          Of course, you could load any client side framework you like, such as
+          Preact, Vue etc and use that too.
+        </p>
+        <p>
           Click <button data-id="genReactUI">This Button</button> to render some
           React here in the browser
         </p>
