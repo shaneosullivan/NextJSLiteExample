@@ -54,7 +54,7 @@ function build() {
     // Convert the typescript to JS
     pageCode.forEach((fileInfo) => {
       execSync(
-        `tsc browser/${fileInfo.name}.${fileInfo.ext} --jsx react-jsx --outDir tmp`
+        `${rootDir}/node_modules/.bin/tsc ${rootDir}/browser/${fileInfo.name}.${fileInfo.ext} --jsx react-jsx --outDir tmp`
       );
     });
   } catch (err) {
@@ -67,7 +67,7 @@ function build() {
   try {
     pageCode.forEach((fileInfo) => {
       // Put all the JS files into a single JS file
-      var cmd = `browserify ${rootDir}/tmp/browser/${fileInfo.name}.js `;
+      var cmd = `${rootDir}/node_modules/.bin/browserify ${rootDir}/tmp/browser/${fileInfo.name}.js `;
       if (shouldMinify) {
         cmd += `-p [ tinyify --no-flat ] `;
       }
