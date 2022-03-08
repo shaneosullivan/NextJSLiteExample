@@ -49,3 +49,15 @@ This project has a few examples of simple things you can do without React or Nex
 
 Of course, you can use whatever you want in the browser, including Web Components, or even other
 client side libraries to render more complex UIs if you want to do so. It's the Open Web, go have fun, but in a highly performant way!
+
+## Using with Existing Project
+
+If you have an existing project and want to set up client side only Typescript usage, do the following:
+
+- Make a folder `/scripts` at the root of your NextJS project, and copy the `build-browser.js` file into it.
+- Make a folder `/browser` into which you put the files to be transpiled. The output of the transpilation will be in `/public/js`
+- Update your `tsconfig.json` to have `"tmp/*.js"` in the `include` array.
+- Add the following to the `scripts` section of `package.json`: `"watch": "node scripts/build-browser.js --watch",`
+- Replace the `build` script in `package.json` with: `"build": "node scripts/build-browser.js --minify && next build",`
+
+Also note that this was all tested with Node 16. Your mileage may vary with earlier versions of Node.

@@ -67,7 +67,19 @@ function build() {
   try {
     pageCode.forEach((fileInfo) => {
       // Put all the JS files into a single JS file
-      var cmd = `${rootDir}/node_modules/.bin/browserify ${rootDir}/tmp/browser/${fileInfo.name}.js `;
+      const possiblePaths = [
+        `${rootDir}/tmp/browser/${fileInfo.name}.js`,
+        `${rootDir}/tmp/${fileInfo.name}.js`,
+      ];
+      let foundPath = null;
+      for (let i = 0; i < possiblePaths.length; i++) {
+        if (fs.existsSync(possiblePaths[i])) {
+          foundPath = possiblePaths[i];
+          break;
+        }
+      }
+
+      var cmd = `${rootDir}/node_modules/.bin/browserify ${foundPath} `;
       if (shouldMinify) {
         cmd += `-p [ tinyify --no-flat ] `;
       }
