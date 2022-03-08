@@ -16,7 +16,7 @@ Hopefully in the future (written March 2022), the NextJS team will enable such f
 
 Feel free to use it as the beginning of your project. See it running live at [https://next-js-lite-example.vercel.app/](https://next-js-lite-example.vercel.app/)
 
-## Using it
+## Using as a Starter Project
 
 Check out the code and run
 
@@ -59,5 +59,7 @@ If you have an existing project and want to set up client side only Typescript u
 - Update your `tsconfig.json` to have `"tmp/*.js"` in the `include` array.
 - Add the following to the `scripts` section of `package.json`: `"watch": "node scripts/build-browser.js --watch",`
 - Replace the `build` script in `package.json` with: `"build": "node scripts/build-browser.js --minify && next build",`
+
+This should set up your build system. You can then add `<script ...>` tags to whichever pages you want to include the JavaScript files in, as in [the index page](https://github.com/shaneosullivan/NextJSLiteExample/blob/main/pages/index.tsx)
 
 Also note that this was all tested with Node 16. Your mileage may vary with earlier versions of Node.
