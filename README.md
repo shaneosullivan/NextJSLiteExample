@@ -59,6 +59,12 @@ If you have an existing project and want to set up client side only Typescript u
 - Update your `tsconfig.json` to have `"tmp/*.js"` in the `include` array.
 - Add the following to the `scripts` section of `package.json`: `"watch": "node scripts/build-browser.js --watch",`
 - Replace the `build` script in `package.json` with: `"build": "node scripts/build-browser.js --minify && next build",`
+- Add the following to `.gitignore`:
+
+```
+public/js
+tmp
+```
 
 This should set up your build system. You can then add `<script ...>` tags to whichever pages you want to include the JavaScript files in, as in [the index page](https://github.com/shaneosullivan/NextJSLiteExample/blob/37908b151cc49a3fef88d621e0acdda210f705c8/pages/index.tsx#L104)
 
