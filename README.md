@@ -59,7 +59,8 @@ If you have an existing project and want to set up client side only Typescript u
 - Update your `tsconfig.json` to have `"tmp/*.js"` in the `include` array.
 - Add the following to the `scripts` section of `package.json`: `"watch": "node scripts/build-browser.js --watch",`
 - Replace the `build` script in `package.json` with: `"build": "node scripts/build-browser.js --minify && next build",`
-- Add the following to `.gitignore`: ```
+- Add the following to `.gitignore`: 
+```
   public/js
   tmp
 
