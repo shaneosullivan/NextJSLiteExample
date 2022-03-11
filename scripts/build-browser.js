@@ -106,7 +106,10 @@ async function build() {
       for (let i = 0; i < possiblePaths.length; i++) {
         if (fs.existsSync(possiblePaths[i])) {
           foundPath = possiblePaths[i];
-          justCopy = true;
+
+          // If the file is at the root of the /tmp folder, it has no
+          // imports, so just copy it
+          justCopy = i > 0;
           break;
         }
       }
