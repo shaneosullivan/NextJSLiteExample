@@ -72,19 +72,33 @@ function build() {
         `${rootDir}/tmp/${fileInfo.name}.js`,
       ];
       let foundPath = null;
+      let justCopy = false;
       for (let i = 0; i < possiblePaths.length; i++) {
         if (fs.existsSync(possiblePaths[i])) {
           foundPath = possiblePaths[i];
+          justCopy = true;
           break;
         }
       }
 
-      var cmd = `${rootDir}/node_modules/.bin/browserify ${foundPath} `;
-      if (shouldMinify) {
-        cmd += `-p [ tinyify --no-flat ] `;
-      }
+      if (justCopy) {
+        // Remove any @ts-ignore comments
+        const fileContents = fs.readFileSync(foundPath).toString();
+        const fileLines = fileContents.split("\n").filter((line) => {
+          return line.indexOf("// @ts-") !== 0;
+        });
+        const newFileContents = fileLines.join("\n");
+        fs.writeFileSync(foundPath, newFileContents);
 
-      currentCmd = `${cmd} > ${rootDir}/public/js/${fileInfo.name}.js`;
+        currentCmd = `cp ${foundPath} ${rootDir}/public/js/`;
+      } else {
+        var cmd = `${rootDir}/node_modules/.bin/browserify ${foundPath} `;
+        if (shouldMinify) {
+          cmd += `-p [ tinyify --no-flat ] `;
+        }
+
+        currentCmd = `${cmd} > ${rootDir}/public/js/${fileInfo.name}.js`;
+      }
       execSync(currentCmd);
     });
 
@@ -99,7 +113,7 @@ function build() {
     console.error(
       "Browserify error running command",
       currentCmd,
-      err.stdout.toString()
+      err.stdout ? err.stdout.toString() : err
     );
   }
 }
