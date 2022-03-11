@@ -22,6 +22,7 @@ Check out the code and run
 
 ```
   npm i
+  npm install uglify-js -g
 ```
 
 to install all the dependencies. Then open two terminal windows. In the first, type

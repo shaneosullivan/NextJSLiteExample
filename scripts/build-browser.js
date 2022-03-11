@@ -59,7 +59,7 @@ async function build() {
       return new Promise((resolve, reject) => {
         exec(
           `${rootDir}/node_modules/.bin/tsc ${rootDir}/browser/${fileInfo.name}.${fileInfo.ext} --jsx react-jsx --outDir tmp`,
-          (err, stdout) => {
+          function (err, stdout, stderr) {
             if (err) {
               console.error("Typescript error", stdout.toString());
               reject(err);
@@ -95,6 +95,11 @@ async function build() {
       }
 
       if (justCopy) {
+        if (shouldMinify) {
+          const minifyCmd = `uglifyjs ${foundPath} --compress --mangle  -o ${foundPath}`;
+          execSync(minifyCmd);
+        }
+
         // Remove any @ts-ignore comments
         const fileContents = fs.readFileSync(foundPath).toString();
         const fileLines = fileContents.split("\n").filter((line) => {
