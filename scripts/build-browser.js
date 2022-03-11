@@ -11,6 +11,23 @@ var excludedDirs = ["tmp", "public", "scripts", "node_modules", "styles"].map(
 var shouldWatch = process.argv.some((arg) => arg === "--watch");
 var shouldMinify = process.argv.some((arg) => arg === "--minify");
 
+var outputDir =
+  process.argv.find((arg, idx, args) => {
+    if (idx === 0) {
+      return false;
+    }
+    var prevArg = args[idx - 1];
+    if (prevArg === "--dest") {
+      if (arg.indexOf("--") === 0) {
+        throw new Error(
+          "No value provided for --dest, you must specify a folder name, e.g. --dest public/js"
+        );
+      }
+      outputDir = args[idx + 1];
+      return true;
+    }
+  }) || "public/js";
+
 var isRunning = false;
 var buildIsPending = false;
 
@@ -34,7 +51,7 @@ const pageCode = fs
 function ensureDir() {
   try {
     // First make sure that the directories we need exist
-    execSync(`mkdir -p ${rootDir}/tmp && mkdir -p ${rootDir}/public/js`);
+    execSync(`mkdir -p ${rootDir}/tmp && mkdir -p ${rootDir}/${outputDir}`);
     return true;
   } catch (err) {
     console.error("Mkdir error", err.stdout.toString());
@@ -47,7 +64,7 @@ async function build() {
     buildIsPending = true;
     return false;
   }
-  console.log("Building....");
+  console.log(`Building to ${outputDir} ....`);
   isRunning = true;
 
   const start = Date.now();
@@ -108,14 +125,14 @@ async function build() {
         const newFileContents = fileLines.join("\n");
         fs.writeFileSync(foundPath, newFileContents);
 
-        currentCmd = `cp ${foundPath} ${rootDir}/public/js/`;
+        currentCmd = `cp ${foundPath} ${rootDir}/${outputDir}/`;
       } else {
         var cmd = `${rootDir}/node_modules/.bin/browserify ${foundPath} `;
         if (shouldMinify) {
           cmd += `-p [ tinyify --no-flat ] `;
         }
 
-        currentCmd = `${cmd} > ${rootDir}/public/js/${fileInfo.name}.js`;
+        currentCmd = `${cmd} > ${rootDir}/${outputDir}/${fileInfo.name}.js`;
       }
       execSync(currentCmd);
     });

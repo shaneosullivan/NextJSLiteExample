@@ -39,6 +39,13 @@ npm run watch
 
 This starts the custom build script for the client side only code.
 
+You can optionally add flags, e.g to redirect the built files to another folder,
+use the `--dest` flag.
+
+```
+npm run watch --dest public/js/build
+```
+
 Open up a browser at `localhost:3000` to see it running.
 
 This project has a few examples of simple things you can do without React or NextJS client side libraries, such as:
