@@ -59,8 +59,9 @@ async function build() {
       return new Promise((resolve, reject) => {
         exec(
           `${rootDir}/node_modules/.bin/tsc ${rootDir}/browser/${fileInfo.name}.${fileInfo.ext} --jsx react-jsx --outDir tmp`,
-          (err) => {
+          (err, stdout) => {
             if (err) {
+              console.error("Typescript error", stdout.toString());
               reject(err);
             }
             resolve(true);
@@ -71,7 +72,6 @@ async function build() {
 
     await Promise.all(promises);
   } catch (err) {
-    console.error("Typescript error", err.stdout ? err.stdout.toString() : err);
     buildIsPending = isRunning = false;
     return;
   }
