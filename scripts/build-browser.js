@@ -1,4 +1,4 @@
-const { execSync } = require("child_process");
+const { exec, execSync } = require("child_process");
 const fs = require("fs");
 var watch = require("node-watch");
 
@@ -42,7 +42,7 @@ function ensureDir() {
   }
 }
 
-function build() {
+async function build() {
   if (isRunning) {
     buildIsPending = true;
     return false;
@@ -50,15 +50,28 @@ function build() {
   console.log("Building....");
   isRunning = true;
 
+  const start = Date.now();
+  let lastTime = start;
+
   try {
     // Convert the typescript to JS
-    pageCode.forEach((fileInfo) => {
-      execSync(
-        `${rootDir}/node_modules/.bin/tsc ${rootDir}/browser/${fileInfo.name}.${fileInfo.ext} --jsx react-jsx --outDir tmp`
-      );
+    const promises = pageCode.map((fileInfo) => {
+      return new Promise((resolve, reject) => {
+        exec(
+          `${rootDir}/node_modules/.bin/tsc ${rootDir}/browser/${fileInfo.name}.${fileInfo.ext} --jsx react-jsx --outDir tmp`,
+          (err) => {
+            if (err) {
+              reject(err);
+            }
+            resolve(true);
+          }
+        );
+      });
     });
+
+    await Promise.all(promises);
   } catch (err) {
-    console.error("Typescript error", err.stdout.toString());
+    console.error("Typescript error", err.stdout ? err.stdout.toString() : err);
     buildIsPending = isRunning = false;
     return;
   }
