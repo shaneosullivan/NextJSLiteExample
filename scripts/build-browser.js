@@ -75,9 +75,11 @@ async function build() {
         const srcFilePath = `${rootDir}/browser/${fileInfo.name}.${fileInfo.ext}`;
         const destFilePath = `${rootDir}/${outputDir}/${fileInfo.name}.js`;
         const srcStat = fs.statSync(srcFilePath);
-        const destStat = fs.statSync(destFilePath);
+        const destStat = fs.existsSync(destFilePath)
+          ? fs.statSync(destFilePath)
+          : null;
 
-        const hasChanged = destStat.mtime < srcStat.mtime;
+        const hasChanged = destStat ? destStat.mtime < srcStat.mtime : true;
 
         return hasChanged;
       })
