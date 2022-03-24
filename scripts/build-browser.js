@@ -67,25 +67,34 @@ async function build() {
   console.log(`Building to ${outputDir} ....`);
   isRunning = true;
 
-  const start = Date.now();
-  let lastTime = start;
-
   try {
     // Convert the typescript to JS
-    const promises = pageCode.map((fileInfo) => {
-      return new Promise((resolve, reject) => {
-        exec(
-          `${rootDir}/node_modules/.bin/tsc ${rootDir}/browser/${fileInfo.name}.${fileInfo.ext} --jsx react-jsx --outDir tmp`,
-          function (err, stdout, stderr) {
-            if (err) {
-              console.error("Typescript error", stdout.toString());
-              reject(err);
+    const promises = pageCode
+      .filter((fileInfo) => {
+        // Only compile files that have changed since the last time
+        const srcFilePath = `${rootDir}/browser/${fileInfo.name}.${fileInfo.ext}`;
+        const destFilePath = `${rootDir}/${outputDir}/${fileInfo.name}.js`;
+        const srcStat = fs.statSync(srcFilePath);
+        const destStat = fs.statSync(destFilePath);
+
+        const hasChanged = destStat.mtime < srcStat.mtime;
+
+        return hasChanged;
+      })
+      .map((fileInfo) => {
+        return new Promise((resolve, reject) => {
+          exec(
+            `${rootDir}/node_modules/.bin/tsc ${rootDir}/browser/${fileInfo.name}.${fileInfo.ext} --jsx react-jsx --outDir tmp`,
+            function (err, stdout, stderr) {
+              if (err) {
+                console.error("Typescript error", stdout.toString());
+                reject(err);
+              }
+              resolve(true);
             }
-            resolve(true);
-          }
-        );
+          );
+        });
       });
-    });
 
     await Promise.all(promises);
   } catch (err) {
@@ -106,10 +115,7 @@ async function build() {
       for (let i = 0; i < possiblePaths.length; i++) {
         if (fs.existsSync(possiblePaths[i])) {
           foundPath = possiblePaths[i];
-
-          // If the file is at the root of the /tmp folder, it has no
-          // imports, so just copy it
-          justCopy = i > 0;
+          justCopy = true;
           break;
         }
       }
